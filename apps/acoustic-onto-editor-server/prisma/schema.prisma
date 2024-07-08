@@ -1,0 +1,44 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model ClassModel {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String?
+  description String?
+  objects     Object?
+  properties  Property?
+  ontologies  Ontology?
+}
+
+model Object {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  idClass   ClassModel? @relation(fields: [ID], references: [id])
+  ID        String?     @unique
+}
+
+model Property {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  name      String?
+  idClass   ClassModel? @relation(fields: [ID], references: [id])
+  ID        String?     @unique
+}
+
+model Ontology {
+  id         String      @id @default(cuid())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  idOntology ClassModel? @relation(fields: [ID], references: [id])
+  ID         String?     @unique
+}
